@@ -1,31 +1,29 @@
 from bs4 import BeautifulSoup
 import requests
-#Target web page
 import sys
 
-wikiSearch = "Genghis_Khan"
-url = "https://en.wikipedia.org/wiki/" + wikiSearch
 
-#Connection to web page
-response = requests.get(url)
-print(response.status_code)
+countryUrl = "https://history.state.gov/countries/all"
 
-if response.status_code != 200:
+countryResponse = requests.get(countryUrl)
+
+if countryResponse.status_code != 200:
     sys.exit()
 
-# Convert the response HTLM string into a python string
-html = response.text
+countrySoup = BeautifulSoup(countryResponse.text, 'lxml')
+soup = BeautifulSoup(countryResponse.text, 'lxml')
 
-soup = BeautifulSoup(html, 'lxml')
-
-#List to store results
 textContent = []
 
-#Get all headers from the latest section of the web site
-for i in range(0, 10):
-    the_latest = soup.find_all("h3")[i].text
-    textContent.append(the_latest)
+for i in range(0, 200):
+    country = countrySoup.find_all("li")[i].text
+    url = "https://en.wikipedia.org/wiki/" + country
+    response = requests.get(url)
+    
+    soup = BeautifulSoup(response.text, 'lxml')
+    for i in range(0, 10):
+        the_latest = soup.find_all("h3")[i].text
+        print(the_latest)
 
-print(textContent)
-#pd.DataFrame(textContent)
+
 
