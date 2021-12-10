@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 #Target web page
+import sys
 
 wikiSearch = "Genghis_Khan"
 url = "https://en.wikipedia.org/wiki/" + wikiSearch
@@ -8,6 +9,9 @@ url = "https://en.wikipedia.org/wiki/" + wikiSearch
 #Connection to web page
 response = requests.get(url)
 print(response.status_code)
+
+if response.status_code != 200:
+    sys.exit()
 
 # Convert the response HTLM string into a python string
 html = response.text
@@ -24,3 +28,4 @@ for i in range(0, 10):
 
 print(textContent)
 #pd.DataFrame(textContent)
+
